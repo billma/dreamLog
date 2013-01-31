@@ -1,77 +1,36 @@
-<html lang="en">
-	<head>
-		<title>Clouds</title>
-		<meta charset="utf-8">
-		<style type="text/css">
-
-			body {
-				background-color: #326696;
-				margin: 0px;
-				overflow: hidden;
-				font-family:Monospace;
-				font-size:13px;
-				text-align:center;
-				font-weight: bold;
-				text-align:center;
-			}
-
-			a {
-				color:#0078ff;
-			}
-      canvas{
-        background:url('http://www.hdwallpaperhot.com/files/fantasy-2/fantasy-winter-night-wallpaper.jpg') no-repeat;
-        background-size:100% 100%;
-        background-color:black;
-      }
-
-		</style>
-	</head>
-	<body>
-
-		<script type="text/javascript">
-		  var _gaq = _gaq || [];
-		  _gaq.push(['_setAccount', 'UA-86951-7']);
-		  _gaq.push(['_trackPageview']);
- 
-		  (function() {
-		    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-		  })();
-		</script>
+<%=stylesheet_link_tag 'home'%>
 <script src="https://raw.github.com/mrdoob/three.js/master/build/three.js"></script>
+    
+<script id="vs" type="x-shader/x-vertex">
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  }
+</script>
 
-		<script id="vs" type="x-shader/x-vertex">
-			varying vec2 vUv;
+<script id="fs" type="x-shader/x-fragment">
+  uniform sampler2D map;
+  uniform vec3 fogColor;
+  uniform float fogNear;
+  uniform float fogFar;
+  varying vec2 vUv;
+  void main() {
+    float depth = gl_FragCoord.z / gl_FragCoord.w;
+    float fogFactor = smoothstep( fogNear, fogFar, depth );
 
-			void main() {
-
-				vUv = uv;
-				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-			}
-		</script>
-
-		<script id="fs" type="x-shader/x-fragment">
-			uniform sampler2D map;
-
-			uniform vec3 fogColor;
-			uniform float fogNear;
-			uniform float fogFar;
-			varying vec2 vUv;
-			void main() {
-
-				float depth = gl_FragCoord.z / gl_FragCoord.w;
-				float fogFactor = smoothstep( fogNear, fogFar, depth );
-
-				gl_FragColor = texture2D( map, vUv );
-				gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
-				gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
-
-			}
-
-		</script>
-    <%=javascript_include_tag "cloud"%>
-	</body>
-</html>
+    gl_FragColor = texture2D( map, vUv );
+    gl_FragColor.w *= pow( gl_FragCoord.z, 20.0 );
+    gl_FragColor = mix( gl_FragColor, vec4( fogColor, gl_FragColor.w ), fogFactor );
+  }
+</script>
+<%=javascript_include_tag "cloud"%>
+<div id="container">
+  <div id="nav">
+    <div class="content"></div>
+  </div>
+  <div class="left hide"></div>
+  <div class="right"></div>
+</div>
 
 
