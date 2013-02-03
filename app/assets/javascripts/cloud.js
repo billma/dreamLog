@@ -37,6 +37,7 @@ function init() {
 
 	camera = new THREE.PerspectiveCamera( 15, window.innerWidth /window.innerHeight, 1, 5000 );
 	camera.position.z = 6000;
+  camera.position.y=-70;
 
 	scene = new THREE.Scene();
 
