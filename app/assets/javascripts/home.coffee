@@ -1,4 +1,11 @@
 
+class comment extends Backbone.Model
+  defaults:
+    user_icon:""
+    user_name:""
+    body:""
+class dreamLog extends Backbone.Model
+
 
 class HomePage
   constructor: ->
@@ -19,8 +26,6 @@ class HomePage
         self.dreamLog.open()
 
 
-
-
 class LeftBar
   constructor:->
     @setupEvents()
@@ -38,8 +43,6 @@ class LeftBar
        $('.left').addClass 'left_close'
        $('.right').addClass 'right_expand'
        $('.add_icon').removeClass 'add_icon_show'
-
-
 
 class Filter
   constructor:->
@@ -65,28 +68,39 @@ class Filter
     else 
        @open()
         
-class DreamLog
-  constructor:->
+class DreamLog extends Backbone.View
+  template:$('#dreamLog-template').generateTemplate()
+  el:$('#dreamLog')
+  events:
+    'click .dreamLog_closeButton':'closeDL'
+    'click #read':'showRead'
+    'click #comments':'showComments'
+  initialize:->
     self=@
+    $(@el).html(@template())
+    #testing
+    comment=new Comment()
+    comment.render()
+    comment1=new Comment()
+    comment1.render()
+
     @dreamLog=$('#dreamLog')
-    @setupEvents()
+    #  @setupEvents()
     return @
   
 
   # ---------------
   # private methods
   # ---------------
-  setupEvents:=>
-    self=@
-    $('.dreamLog_closeButton').click ->
-      console.log 'closing'
-      self.close()
-    $('#read').click ->
-      $('.comment-wrap').removeClass 'showComments'
-      $('.dream_content').addClass 'showRead'
-    $('#comments').click -> 
-      $('.comment-wrap').addClass 'showComments'
-      $('.dream_content').removeClass 'showRead'
+  closeDL:=>
+    @close()
+  showRead:=>
+    $('.comment-wrap').removeClass 'showComments'
+    $('.dream_content').addClass 'showRead'
+  showComments:=>
+    $('.comment-wrap').addClass 'showComments'
+    $('.dream_content').removeClass 'showRead'
+
   # ---------------
   # public methods
   # ---------------
@@ -112,6 +126,44 @@ class DreamLog
     else
       return true
 
-new HomePage()
-init()
+
+
+class Comment extends Backbone.View
+  template:$('#comment-template').generateTemplate()
+  tagName:'li'
+  className:'comment'
+
+  events:
+    'click .allCommentLink':'showReplies'
+  initialize:->
+
+  render:->
+    $(@el).html(@template)
+    $('#comments-list').append @el
+
+  # private method 
+  showReplies:=>
+    @toggleReplyList()
+    @toggleCommentArrow()
+
+  toggleReplyList:=>
+    a=@.$('.reply-list')
+    if a.hasClass 'reply-list-closed'
+      a.removeClass 'reply-list-closed'
+    else
+      a.addClass 'reply-list-closed'
+
+
+  toggleCommentArrow:=>
+    a=@.$('.allCommentLink .icon-chevron-down')
+    if a.hasClass 'icon-up'
+      a.removeClass 'icon-up'
+    else
+      a.addClass 'icon-up'
     
+new HomePage()
+#init()
+    
+
+    
+

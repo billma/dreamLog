@@ -32,7 +32,7 @@ canvas{
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
-  pacity:0.9;
+  opacity:0.9;
   min-width:1000px;
 }
 #container{
@@ -66,7 +66,7 @@ canvas{
   font-size:20px; 
   text-align:center;
   -webkit-transition:
-      all 0.2s ease-in-out,
+      all 0.2s ease-in-out;
 }
 #l_icon{
   top:20px;
@@ -108,7 +108,7 @@ canvas{
   position:relative;
   width:100%;
   height:80px;  
-  box-shadow:0 2px -1px rgba(255,255,255,0.2);
+  box-shadow:0 2px 1px rgba(255,255,255,0.2);
   margin-bottom:3px;
 }
 
@@ -179,6 +179,7 @@ canvas{
   border-radius:50%;
   border-top-left-radius:5px;
   border-top-right-radius:5px;
+  z-index:101;
 }
 .dreamLog_closeButton:hover{
   cursor:pointer;
@@ -188,7 +189,7 @@ canvas{
     inset 0 0 50px rgba(0,0,0,0.4);
 }
 .dreamLog_closeButton:active{
-  bbox-shadow:
+  box-shadow:
     0 0 5px rgba(255,255,255,0.2),
     inset 0 0 50px rgba(255,255,255,0.4);
   color:black;
@@ -312,9 +313,96 @@ canvas{
 }
 
 
+/* dreamlog comments*/
+#comments-list{
+  width:100%;
+  height:100%;
+  margin-top:20px;
+} 
+.comment{
+  position:relative;
+  width:100%;
+  min-height:50px;
+  margin-bottom:10px;
+  padding:20px 0;
+  text-align:left;
+}
+.user-icon-wrap{
+  float:left;
+  width:20%;
+  text-align:center;
+}
+.user_icon{
+  border:5px solid rgba(255,255,255,0.3);
+}
+.comment-content{
+  position:relative;
+  width:100%;
+}
+.comment-body, .reply-body{
+  position:relative;
+  display:block;
+  float:left;
+  width:80%;
+  font-size:15px; 
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  padding-bottom:20px;
+}
+.comment-body .user-name{
+ color:#2698AD; 
+}
+.comment-info{
+  font-size:14px;
+}
+.comment-flag{
+  position:relative;
+  color:#2698AD;
+}
+.comment-time{
+  color:#999;
+}
+.allCommentLink{
+  position:relative;
+  color:#2698AD;
+  float:right;
+}
+.allCommentLink .icon-chevron-down{
+  -webkit-transition: -webkit-transform 0.4s linear;
+}
+.icon-up{
+  -webkit-transition: -webkit-transform 0.4s linear;
+  -webkit-transform:rotate(180deg);
+}
+.comment-flag:hover, .allCommentLink:hover{
+  color:#eee;
+  text-shadow:0 0 15px #2698AD;
+  cursor:pointer;
+  -webkit-transition: color 0.2s linear;
+}
+.comment-flag:active, .allCommentLink:active{
+  top:2px;
+}
 
+/*reply list*/
 
-/*----------------*/
+.reply-list{
+  width:90%;
+  float:right;
+  -webkit-transition:all 0.6s ease-in-out;
+}
+.reply-list-closed{
+  height:0px;
+  opacity:0;
+  -webkit-transform:scale(0);
+  -webkit-transition:all 0.2s ease-in-out;
+}
+.reply{
+  padding:10px 0;
+  width:100%;
+}
+
+/**-----------*/
+
 .dreamLog-title{
   font-size:30px;
   line-height:2em;
