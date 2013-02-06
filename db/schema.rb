@@ -11,14 +11,15 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130205181513) do
+ActiveRecord::Schema.define(:version => 20130205200230) do
 
   create_table "comments", :force => true do |t|
-    t.string   "body"
+    t.text     "body"
     t.integer  "user_id"
     t.boolean  "flag"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.integer  "log_id"
   end
 
   create_table "logs", :force => true do |t|
@@ -30,7 +31,7 @@ ActiveRecord::Schema.define(:version => 20130205181513) do
   end
 
   create_table "replies", :force => true do |t|
-    t.string   "body"
+    t.text     "body"
     t.integer  "user_id"
     t.integer  "comment_id"
     t.boolean  "flag"
@@ -44,6 +45,7 @@ ActiveRecord::Schema.define(:version => 20130205181513) do
     t.string   "thumb_url"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.string   "uid"
   end
 
   create_table "votes", :force => true do |t|

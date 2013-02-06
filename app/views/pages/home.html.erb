@@ -1,4 +1,5 @@
 <%=stylesheet_link_tag 'home'%>
+<%=stylesheet_link_tag 'newDreamLog'%>
 <script src="https://raw.github.com/mrdoob/three.js/master/build/three.js"></script>
     
 <script id="vs" type="x-shader/x-vertex">
@@ -24,17 +25,15 @@
   }
 </script>
 
-
-
 <script id="comment-template" type="text/x-handlebars-template">
   
   <div class="comment-content">
     <div class="user-icon-wrap">
-      <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/260898_502288678_1624193401_q.jpg" alt="" class="user_icon img-circle" />
+      <img src="{{user_icon}}" alt="" class="user_icon img-circle" />
     </div>
     <div class="comment-body">
-      <p class="user-name">Bill Ma</p>       
-      <p class="body">nice job buddy!</p>
+      <p class="user-name">{{user_name}}</p>       
+      <p class="body">{{body}}</p>
       <div class="comment-info">
         <span class="comment-time">5 minutes ago</span>
         <span class="comment-flag">
@@ -66,9 +65,7 @@
       </div>
     </div>
   </div>
-
   <div class="clear"></div>
-
 </script>
 <script id="dreamLog-template" type="text/x-handlebars-template">
   <div id="dreamLog-header">
@@ -90,20 +87,8 @@
     <span class="switch-selection"></span>
   </div>
   <div class="dream_content showRead">
-    <div class="dreamLog-title">
-      a big green monster under the bed!
-    </div>    
-    <p class="dreamLog-body">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin non ipsum eget lorem tincidunt pretium sit amet nec turpis. Aliquam felis ipsum, rhoncus vitae accumsan ac, accumsan vitae leo. Fusce luctus mi at dolor faucibus aliquet. Cras id lorem quis lacus placerat cursus. Nunc at metus eu velit vestibulum mattis. Fusce malesuada mattis iaculis. Pellentesque hendrerit mollis nibh vel congue. Nullam tincidunt adipiscing molestie. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Fusce ultrices, risus ut congue rhoncus, massa turpis gravida lacus, eu malesuada dolor dolor et erat. Nulla id tellus libero, sed lacinia risus. Morbi eu erat odio. Fusce volutpat condimentum fringilla. Nullam iaculis dolor mi.
-
-    Proin eget felis quam, non blandit nulla. Vivamus et sapien ut dui malesuada facilisis. Mauris ut egestas felis. Quisque a velit nec ligula ultrices pulvinar. In scelerisque, dui quis adipiscing faucibus, tortor eros facilisis dolor, ac interdum turpis nunc in magna. Aenean sed metus purus. Morbi in vulputate lacus. Cras porttitor egestas elit sit amet tempus. Cras ut pulvinar sapien. Donec sodales hendrerit urna.
-
-    Vestibulum ac nulla quis felis mollis accumsan quis sit amet tellus. Praesent imperdiet dui a leo varius venenatis. Fusce ultricies euismod gravida. Fusce neque massa, pharetra id dignissim ut, aliquam non odio. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum et velit sem. Phasellus condimentum gravida est, nec dictum felis consequat sit amet. Maecenas posuere est at magna tincidunt tristique. Nam consequat luctus ultricies. Nulla facilisi. Fusce mattis imperdiet dui, sed mattis odio vehicula sit amet. Morbi adipiscing nunc sit amet neque ultricies consequat. Donec semper lacus elit, id auctor orci. Mauris venenatis posuere libero, non accumsan leo luctus a. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam sit amet ultricies ante.
-
-    Proin et dui magna. Vivamus dapibus, ligula ut imperdiet fermentum, erat velit suscipit lorem, eu iaculis nunc turpis nec diam. Nunc tincidunt mauris quis mi commodo sit amet vulputate turpis tristique. Nullam elementum orci eu leo ultricies et tristique odio auctor. Nullam eget libero elementum ligula malesuada feugiat eget at ipsum. Suspendisse sit amet tempor turpis. Vestibulum non felis neque. Nunc sapien nulla, iaculis in aliquet non, convallis eu sapien. Mauris convallis pretium nunc, sed bibendum ante semper id.
-
-    In gravida elit ut velit dignissim ultricies. Donec egestas, est a rutrum pretium, velit erat rutrum lacus, nec malesuada nulla quam eget neque. Proin semper tincidunt est quis molestie. Cras sit amet posuere odio. Pellentesque vel purus in ante viverra molestie eu et tortor. Etiam quis magna vel eros imperdiet ullamcorper quis a dui. Proin augue quam, egestas id fermentum ut, sollicitudin ut sem. Vivamus nec congue orci. Donec feugiat est non sapien pharetra pharetra non in ante. Suspendisse at condimentum mi. Morbi euismod, eros nec imperdiet adipiscing, purus mauris scelerisque sem, ultrices aliquam quam felis auctor nisl. Nam ultricies sem ac felis adipiscing tincidunt. Pellentesque ullamcorper tincidunt ultrices. Aenean adipiscing laoreet enim, at tincidunt urna porttitor id. Fusce at arcu ipsum.
-    </p>
+    <div class="dreamLog-title">{{title}}</div>    
+    <p class="dreamLog-body">{{body}}</p>
   </div>
   <div class="comment-wrap">
     <div class="dreamLog-comments">
@@ -111,8 +96,43 @@
       </ul>
     </div>
   </div>
+</script>
 
 
+<script id="dream-template" type="text/x-handlebars-template">
+  <div class="dreamDate">
+    <div class="dreamDate-content">
+      <span class="month_year">Mar 2012</span> 
+      <span class="date">28</span> 
+    </div>
+  </div>
+  <div class="profileImg-wrap">
+    <img src="{{user_icon}}" alt="" class="profileImg img-circle" /> 
+  </div>
+  <div class="dreamInfo">
+    <div class="dreamTitle">{{title}}</div>
+    <div class="dreamVote">
+      <i class="icon-heart"></i>
+      12
+    </div>
+  </div>
+  <div class="dreamArrow">
+    <i class="icon-angle-right"></i>
+  </div>
+</script>
+
+<script id="newDream-template" type="text/x-handlebars-template">
+  <span class="newDreamLog_closeButton">
+    <i class="icon-remove"></i>
+  </span>
+  <form id="newDreamLog-form" action="">
+    <input id="title" type="text" placeholder="Dream Log Title" />
+    <textarea id="body" name="" rows="10" cols="30" placeholder="Last night, I had a dream ..."></textarea>
+    <span id="submit">
+      <i class="icon-ok"></i>
+      <div id="submit-effect" class="bounceOut"></div>
+    </span>
+  </form>
 </script>
 <%=javascript_include_tag "cloud"%>
 <div id="container">
@@ -127,7 +147,6 @@
   </div>
 
   <div class="left left_close">
-
     <span class="add_icon">
       <i class="icon-plus"></i>
     </span>
@@ -143,27 +162,6 @@
       </div>
     </div>
     <ul id="dreamList">
-      <li class="dream">
-      <div class="dreamDate">
-        <div class="dreamDate-content">
-          <span class="month_year">Mar 2012</span> 
-          <span class="date">28</span> 
-        </div>
-      </div>
-      <div class="profileImg-wrap">
-        <img src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash4/260898_502288678_1624193401_q.jpg" alt="" class="profileImg img-circle" /> 
-      </div>
-      <div class="dreamInfo">
-        <div class="dreamTitle">bill's first</div>
-        <div class="dreamVote">
-          <i class="icon-heart"></i>
-          12
-        </div>
-      </div>
-      <div class="dreamArrow">
-        <i class="icon-angle-right"></i>
-      </div>
-      </li>
 
     </ul>
   </div>
@@ -171,7 +169,7 @@
     <div class="popup">
       <ul>
         <li class="popup-option">
-        Show All
+        Everyone's 
         <i class="icon-time"></i>
         </li>
         <li class="popup-option">
@@ -185,7 +183,8 @@
       </ul>
       <span class="arrow"></span>
     </div>
-    <div id="dreamLog" class="" ></div>
+    <div id="dreamLog" class="dreamLog_closed" ></div>
+    <div id="newDreamLog-wrap" class=''></div>
   </div>
 </div>
 
@@ -195,3 +194,4 @@
 <script type="text/javascript">
   $('body').addClass('b-img')
 </script>
+
