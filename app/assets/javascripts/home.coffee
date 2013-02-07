@@ -182,6 +182,7 @@ class DreamLog extends Backbone.View
       c=new Comment()
       c.create data
       @.listenTo c, 'newCommentCreated', ->
+        comments.push c
         new CommentView {model:c}
       $('#addComment').val('')
 
@@ -412,6 +413,7 @@ class CommentView extends Backbone.View
       r=new Reply()
       r.create data
       @.listenTo r, 'newReplyCreated', ->
+        replies.push r
         rv= new ReplyView {model:r}
         self.$('.reply-list ul').append rv.render()
       @.$('.addReply').val('')
