@@ -1,0 +1,9 @@
+
+development:
+  appID: "220360461332105"
+  secret: "10c1a5a26e74647ff8d008d40dc015a5"
+production:
+  appID: "245869448763506"
+  secret: "78af3a13dc16b62fa5be02ab1618730a"
+
+ 

@@ -3,11 +3,19 @@ class User extends Backbone.Model
     return "users/"+@id
   initialize:(option)->
     @id=option['id']
+class CurrentUser extends Backbone.Model
+  url:'current'
+  initialize:->
 
 class Users extends Backbone.Collection
   model:User
   url:'users'
 
+  initialize:->
+  getThumb:(id)->
+    return @.get(id).get 'thumb_url'
+  getName:(id)->
+    return @.get(id).get 'name'
 class Log extends Backbone.Model
   initialize:(option)->
   create:(data)->
@@ -18,10 +26,6 @@ class Log extends Backbone.Model
       new LogView({model:self})
       self.trigger 'newLogCreated'
        
-      
-
-
-
 
 class Logs extends Backbone.Collection
   model:Log
@@ -29,21 +33,42 @@ class Logs extends Backbone.Collection
 
 class Comment extends Backbone.Model
   initialize:(option)->
+  create:(data)->
+    self=@
+    $.post 'comment/create', data, (r)->
+      self.set r
+      self.trigger 'newCommentCreated'
 
+class Comments extends Backbone.Collection
+  model:Comment
+  url:'comments'
+  initialize:->
 
+  getLogComments:(log_id)->
+    return @.where {log_id:log_id}
 class Reply extends Backbone.Model
-  initialize:(option)->
+  initialize:->
+  create:(data)->
+    self=@
+    $.post 'reply/create', data, (r)->
+      self.set r
+      self.trigger 'newReplyCreated'
 class Replies extends Backbone.Collection
-  url:'replies'
   model:Reply
+  url:'replies'
 
-
+  initialize:->
+  getCommentReplies:(id)->
+    return @.where {comment_id:id}
 # views -------------------------------
 
 
 dreamLog=popup=filter=leftbar=newDreamLog=logList=''
+currentUser=new CurrentUser()
 usersCollection= new Users()
 dreams= new Logs()
+comments=new Comments()
+replies=new Replies()
 usersCollection.fetch()
 
 class HomePage extends Backbone.View
@@ -56,16 +81,30 @@ class HomePage extends Backbone.View
   #----------------
   # private methods
   #----------------
+
   # initialize page objects
   initPage: =>
-    dreamLog=new DreamLog()
-    filter=new Filter()
+    # when replies are loaded
+    # create DreamLog
+    replies.on 'reset', ->
+      console.log replies
+      dreamLog=new DreamLog()
+      
+    #create leftBar
     leftBar=new LeftBar()
-    newDreamLog=new NewDreamLog()
+    #create log list
     logList=new LogListView()
+    #create filter object
+    filter=new Filter()
+      
+    newDreamLog=new NewDreamLog()
     
   showNewDream:=>
+    dreamLog.close()
     newDreamLog.open()
+ 
+# --------------------------------------------------        
+# LeftBar: 
       
 class LeftBar extends Backbone.View
   el:$('body')
@@ -105,57 +144,110 @@ class Filter extends Backbone.View
        @close()
     else 
        @open()
-        
+
+# --------------------------------------------------        
+# DreamLog: 
+# object for displaying a dream log
+# must call load() first 
 class DreamLog extends Backbone.View
   template:$('#dreamLog-template').generateTemplate()
   el:$('#dreamLog')
   events:
-    'click .dreamLog_closeButton':'closeDL'
+    'click .dreamLog_closeButton':'close'
     'click #read':'showRead'
     'click #comments':'showComments'
+    'keyup #addComment':'addComment'
   initialize:->
     self=@
   
   # ---------------
   # private methods
-  # ---------------
-  closeDL:=>
-    @close()
+  
+  # show article on  click 'read'
   showRead:=>
     $('.comment-wrap').removeClass 'showComments'
     $('.dream_content').addClass 'showRead'
+
+  # show comments on click 'comments' 
   showComments:=>
     $('.comment-wrap').addClass 'showComments'
     $('.dream_content').removeClass 'showRead'
+  addComment:(e)=>
+    if e.keyCode is 13
+      body=$('#addComment').val().replace(/(\r\n|\n|\r)/gm,"")
+      data={
+        body:body
+        log_id:@log.id
+      }
+      c=new Comment()
+      c.create data
+      @.listenTo c, 'newCommentCreated', ->
+        new CommentView {model:c}
+      $('#addComment').val('')
+
 
   # ---------------
   # public methods
-  # ---------------
+  #
+
+  # load content into 
+  # this object for display
   load:(log)->
+    self=@
+    @log=log
     #load reading content
-    $(@el).html(@template(log.toJSON()))
-    #load comments and replies
+    log.set {cuser_icon:currentUser.get 'thumb_url'}
+
+    # sync time with 
+    # dreamLog flash
+    setTimeout( ->
+      $(self.el).html self.template(log.toJSON())
+      #load comments 
+      logComments= comments.getLogComments(log.get('id'))
+      _.each logComments, (comment)->
+         new CommentView {model:comment}
+    ,500)
+    
+
+  #open dream log
   open:->
     if @isOpen()
       @flash()
     else
       $(@el).removeClass 'dreamLog_closed'
 
+  # close dream log
   close:->
+    @clearActive()
     $(@el).addClass 'dreamLog_closed'
 
+  # flash dream log 
   flash:->
      self=@
      $(@el).css('opacity',0)
      setTimeout( ->
        $(self.el).css('opacity',1)
      ,500)
+  # return true if already open
   isOpen:->
     if $(@el).hasClass 'dreamLog_closed'
       return false
     else
       return true
+  clearActive:->
+     #clear previous active li
+    $('.showDreamArrow').removeClass 'showDreamArrow'
+    $('.dreamActive').removeClass 'dreamActive'
+    $('.showProfileImg').removeClass 'showProfileImg'
+    $('.dreamDateFades').removeClass 'dreamDateFades'
 
+
+
+
+
+# --------------------------------------------------        
+# NewDreamLog: 
+# Form for creating a new dreamlog 
 class NewDreamLog extends Backbone.View
   template:$('#newDream-template').generateTemplate()
   tagName:'div'
@@ -176,7 +268,8 @@ class NewDreamLog extends Backbone.View
   close:->
     @bounceEffect()
     $('#newDreamLog-wrap').addClass 'dreamLog_closed'
-
+  #---------------
+  # private mehtod
   ballEffect:=>
     $('#submit-effect').removeClass 'bounceOut'
     $('#submit-effect').addClass 'ball'
@@ -200,8 +293,9 @@ class NewDreamLog extends Backbone.View
         dreamLog.open()
       ,1000)
       
-
-  
+# --------------------------------------------------        
+# LogView: 
+# list view for the left bar post list
 class LogView extends Backbone.View
   template:$('#dream-template').generateTemplate()
   tagName:'li'
@@ -217,14 +311,26 @@ class LogView extends Backbone.View
 
   render:->
     $(@el).html(@template(@model.toJSON()))
-    $('#dreamList').append @el
+    $('#dreamList').prepend @el
   showDream:->
+    newDreamLog.close()
+    @dreamActive()
     dreamLog.load @model
     if dreamLog.isOpen()
       dreamLog.flash()
     else
       dreamLog.open()
 
+  dreamActive:=>
+    dreamLog.clearActive()
+    @.$('.profileImg-wrap').addClass 'showProfileImg'
+    @.$('.dreamDate').addClass 'dreamDateFades'
+    @.$('.dreamArrow').addClass 'showDreamArrow'
+    $(@el).addClass 'dreamActive'
+      
+# --------------------------------------------------        
+# LogListView: 
+# list all the view the left bar 
 
 class LogListView extends Backbone.View
   el:$('#dreamList')
@@ -237,6 +343,10 @@ class LogListView extends Backbone.View
     dreams.each (data)->
       new LogView({model:data})
 
+# --------------------------------------------------        
+# CommentView: 
+# display each interpretation 
+
 class CommentView extends Backbone.View
   template:$('#comment-template').generateTemplate()
   tagName:'li'
@@ -244,17 +354,35 @@ class CommentView extends Backbone.View
 
   events:
     'click .allCommentLink':'showReplies'
+    'keyup .addReply':'addReply'
   initialize:->
+    @render()
 
   render:->
-    data=@model.toJSON()
-    user= usersCollection.get 1
-    data.user_name=user.get 'name'
-    data.user_icon=user.get 'thumb_url'
-    $(@el).html(@template(data))
+    user_id= @model.get 'user_id'
+    @model.set {
+      user_icon:usersCollection.getThumb user_id
+      user_name:usersCollection.getName user_id
+      cuser_icon:currentUser.get 'thumb_url'
+    }
+    $(@el).html(@template(@model.toJSON()))
+    @loadReplies()
     $('#comments-list').prepend @el
 
+
   # private method 
+  loadReplies:=>
+    self=@
+    replylist=replies.getCommentReplies @model.get 'id'
+    if replylist.length>0
+      @.$('.allCommentLink').hide()
+      _.each replylist, (reply)->
+        rv=new ReplyView {model:reply}
+        self.$('.reply-list ul').append rv.render()
+    else
+      @.$('.reply-list').addClass 'reply-list-closed'
+
+
   showReplies:=>
     @toggleReplyList()
     @toggleCommentArrow()
@@ -272,27 +400,58 @@ class CommentView extends Backbone.View
       a.removeClass 'icon-up'
     else
       a.addClass 'icon-up'
+  addReply:(e)=>
+    self=@
+    if e.keyCode is 13
+      @.$('.allCommentLink').hide()
+      body=@.$('.addReply').val().replace(/(\r\n|\n|\r)/gm,"")
+      data={
+        body:body
+        comment_id:@model.get 'id'
+      }
+      r=new Reply()
+      r.create data
+      @.listenTo r, 'newReplyCreated', ->
+        rv= new ReplyView {model:r}
+        self.$('.reply-list ul').append rv.render()
+      @.$('.addReply').val('')
 
 
-#----testing -----
 
+
+
+# --------------------------------------------------        
+# ReplyView: 
+# display each reply 
+
+class ReplyView extends Backbone.View
+  template:$('#reply-template').generateTemplate()
+  tagName:'li'
+  className:'reply'
+
+  initialize:->
+  render:->
+    @model.set {
+      user_name:usersCollection.getName @model.get('user_id')
+      user_icon:usersCollection.getThumb @model.get('user_id')
+    }
+    $(@el).html @template(@model.toJSON())
+    return @el
+
+
+
+
+
+#----page onload -----
+#load all users
 usersCollection.on 'reset', ->
-  new HomePage()
-  dreams.fetch()
-  #init()
-  n=new Comment({
-    id:1,
-    body:"bill is awesome",
-    user_id:1,
-    flag:false,
-    log_id:1
-  })
-  comment=new CommentView({model:n})
-  comment.render()
-  comment1=new CommentView({model:n})
-  comment1.render()
-
-
-   
+  #load current User
+  currentUser.fetch success:->
+    dreams.fetch()
+    comments.fetch()
+    replies.fetch()
+    new HomePage()
+     # init()
+     
   
 

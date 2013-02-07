@@ -10,6 +10,7 @@ DreamLog::Application.routes.draw do
   match 'auth/:provider/callback' => 'session#create'
   match 'logout' => 'session#destroy', as:'logout'
   #users
+  match 'current'=>'user#current'
   match 'users'=>'user#all'
   match 'users/:id'=>'user#get'
 
@@ -17,8 +18,13 @@ DreamLog::Application.routes.draw do
   match 'logs'=>'log#all'
   match 'log/create'=>'log#create'
 
-  #reply
-  match 'replies'=> 'reply#all'
+  #comments
+  match 'comments'=>'comment#all'
+  match 'comment/create'=>'comment#create'
+  
+  #repllies
+  match 'replies'=>'reply#all'
+  match 'reply/create'=>'reply#create'
 
 
 end

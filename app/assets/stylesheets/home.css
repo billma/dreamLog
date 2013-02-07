@@ -138,7 +138,9 @@ canvas{
 		0 0 0 15px rgba(255,255,255,0.2), 
     0 0 5px rgba(0,0,0,0.2),
     inset 0 0 50px rgba(0,0,0,0.1);
-  -webkit-transition: all 0.5s ease-in-out;
+  -webkit-transition: 
+    -webkit-transform 0.5s ease-in-out,
+    opacity 0.1s ease-in-out;
   border-radius:10px;
   padding-top:40px;
 } 
@@ -194,7 +196,7 @@ canvas{
 .dreamLog_closed{
   -webkit-transform:scale(0);
 }
-.dream_content, .dreamLog-comments{
+.dream_content{
   position:relative;
   color:white;
   width:80%;
@@ -217,9 +219,6 @@ canvas{
   opacity:0;
 }
 
-.dreamLog-comments{
- top:100px;
-}
 .showRead{
   -webkit-transition:all 0.4s linear;
   opacity:1;
@@ -246,6 +245,7 @@ canvas{
     -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
 }
+
 
 .switch-label {
   display:block;
@@ -311,11 +311,56 @@ canvas{
 
 
 /* dreamlog comments*/
+.addComment-wrap{
+  position:relative;
+  height:60px;
+  width:85%;
+  max-width:870px;
+  margin:auto;
+  margin-top:120px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(255, 255,255,0.1);
+}
+.cuser-wrap{
+  width:10%;
+  height:100%;
+  float:right;
+  text-align:left;
+  padding-left:10px;
+}
+.cuser-wrap img{
+  margin-top:5px;
+  box-shadow:
+    0 0 0 4px rgba(225,225,225,0.5);
+
+
+}
+#addComment{
+width:80%;
+padding:5px 10px 5px 10px;
+height:50px;
+resize:none;
+background:rgba(57,120,172,0.1);
+border:1px solid rgba(255, 255,255,0.1);
+color:#ccc;
+float:right;
+
+}
+.dreamLog-comments{
+  position:relative;
+  color:white;
+  width:80%;
+  max-width:800px;
+  height:60%;
+  margin:auto;
+  overflow:auto;
+  color:#BBB;
+}
 #comments-list{
   width:100%;
   height:100%;
-  margin-top:20px;
 } 
+
 .comment{
   position:relative;
   width:100%;
@@ -342,8 +387,13 @@ canvas{
   float:left;
   width:80%;
   font-size:15px; 
-  border-bottom:1px solid rgba(255,255,255,0.1);
   padding-bottom:20px;
+}
+.comment-body{
+  border-bottom:1px dotted rgba(255,255,255,0.2);
+}
+.reply-body{
+  border-bottom:1px dotted rgba(255,255,255,0.1);
 }
 .comment-body .user-name{
  color:#2698AD; 
@@ -380,12 +430,16 @@ canvas{
   top:2px;
 }
 
-/*reply list*/
+
+  /*reply list*/
 
 .reply-list{
   width:90%;
   float:right;
   -webkit-transition:all 0.6s ease-in-out;
+}
+.reply-list ul{
+  margin-bottom:10px;
 }
 .reply-list-closed{
   height:0px;
@@ -393,10 +447,26 @@ canvas{
   -webkit-transform:scale(0);
   -webkit-transition:all 0.2s ease-in-out;
 }
+
 .reply{
   padding:10px 0;
   width:100%;
 }
+
+.addReply{
+width:70%;
+padding:5px 10px 5px 10px;
+height:50px;
+resize:none;
+background:rgba(57,120,172,0.1);
+border:1px solid rgba(255, 255,255,0.1);
+color:#ccc;
+float:right;
+}
+.reply-list .cuser-wrap{
+  margin-right:10px;
+}
+
 
 /**-----------*/
 
@@ -509,15 +579,20 @@ canvas{
   background:rgba(57,120,172,0.8);
 }
 .dream:hover{
-  background:rgba(57,120,172,0.3);
+  background:rgba(57,120,172,0.4);
   cursor:pointer;
 }
-.dream:hover .dreamDate{
+.dreamActive{
+  background:rgba(57,120,172,0.8);
+}
+.showProfileImg{
+ -webkit-transform:translateX(100px); 
+}
+.dreamDateFades{
   opacity:0;
 }
-
-.dream:hover .profileImg-wrap{
- -webkit-transform:translateX(0); 
+.showDreamArrow{
+  opacity:1 !important;
 }
 .dream:hover .dreamArrow{
   opacity:1;
@@ -528,8 +603,8 @@ canvas{
 .profileImg-wrap{
   position:absolute;
   width:27%;
-  height:100%;
- -webkit-transform:translateX(-100px); 
+  height:98%;
+  left:-100px;
   -webkit-transition: -webkit-transform 0.4s linear;
 }
 .profileImg{

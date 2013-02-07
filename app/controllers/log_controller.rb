@@ -9,7 +9,6 @@ class LogController < ApplicationController
       :body=>params[:body],
       :user_id=>current_user.id
     })
-
     render :json=> n
   end 
   def update

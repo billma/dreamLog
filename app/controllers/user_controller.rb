@@ -1,7 +1,7 @@
 class UserController < ApplicationController
   # get all users
   def all
-    render :json => User.all
+    render :json => User.all 
   end 
   # get user by id
   def get 
@@ -9,5 +9,8 @@ class UserController < ApplicationController
   end 
   # edit user info
   def update
+  end 
+  def current
+    render :json=> current_user
   end 
 end
