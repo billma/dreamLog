@@ -453,7 +453,7 @@ usersCollection.on 'reset', ->
     comments.fetch()
     replies.fetch()
     new HomePage()
-     # init()
+    init()
      
   
 
