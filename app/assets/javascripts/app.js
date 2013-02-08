@@ -9,3 +9,4 @@ $.fn.flashDiv=function(){
       a.css('opacity',1)
   } ,500)
 }
+

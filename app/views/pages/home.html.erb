@@ -41,7 +41,7 @@
       <p class="user-name">{{user_name}}</p>       
       <p class="body">{{body}}</p>
       <div class="comment-info">
-        <span class="comment-time">5 minutes ago</span>
+        <span class="comment-time timeago" title='{{created_at}}'>5 minutes ago</span>
         <span class="comment-flag">
           <i class="icon-flag"></i> report
         </span>
@@ -74,7 +74,7 @@
     <p class="user-name">{{user_name}}</p>       
     <p class="body">{{body}}</p>
     <div class="comment-info">
-      <span class="comment-time">5 minutes ago</span>
+      <span class="timeago comment-time" title="{{created_at}}">5 minutes ago</span>
       <span class="comment-flag">
         <i class="icon-flag"></i> report
       </span>
@@ -131,11 +131,14 @@
 <script id="dream-template" type="text/x-handlebars-template">
   <div class="dreamDate">
     <div class="dreamDate-content">
-      <span class="month_year">Mar 2012</span> 
-      <span class="date">28</span> 
+      <span class="month_year">{{month}} {{year}}</span> 
+      <span class="date">{{date}}</span> 
     </div>
   </div>
   <div class="profileImg-wrap">
+    <span class="delete_icon hide">
+      <i class="icon-minus-sign"></i>
+    </span>
     <img src="{{user_icon}}" alt="" class="profileImg img-circle" /> 
   </div>
   <div class="dreamInfo">
@@ -188,12 +191,18 @@
     <span class="add_icon">
       <i class="icon-plus"></i>
     </span>
+    <span class="edit_icon">
+      <i class="icon-edit"></i>
+    </span>
+    <span class="exit_edit hide">
+      <i class="icon-ok"></i>
+    </span>
     <div id="left-toolBar">
       <div id="search-wrap">
         <i class="icon-search"></i>
         <input id="search" type="" />
       </div>
-      <div id="filter">
+      <div id="filter" >
         <i class="icon-filter"></i>
         filter
         <i class="icon-angle-right"></i>
@@ -206,15 +215,15 @@
   <div class="right right_expand">
     <div class="popup">
       <ul>
-        <li class="popup-option">
+        <li id="noFilter" class="popup-option">
         Everyone's 
         <i class="icon-time"></i>
         </li>
-        <li class="popup-option">
+        <li id="userFilter" class="popup-option">
         My DreamLog 
         <i class="icon-user">`</i>
         </li>
-        <li class="popup-option">
+        <li id="rateFilter" class="popup-option">
         Popular
         <i class="icon-heart"></i>
         </li>

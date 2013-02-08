@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
   attr_accessible :email, :name, :thumb_url, :uid
-  has_many :comments
-  has_many :replies
-  has_many :logs
-  has_many :votes
+  has_many :comments,:dependent => :destroy
+  has_many :replies, :dependent => :destroy
+  has_many :logs,:dependent => :destroy
+  has_many :votes,:dependent => :destroy
 
 
   def self.from_omniauth(auth)

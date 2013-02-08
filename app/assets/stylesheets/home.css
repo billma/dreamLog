@@ -57,33 +57,54 @@ canvas{
   height:100%;
   position:relative;}
 
-#l_icon, .add_icon{
+#l_icon, .add_icon, .edit_icon, .exit_edit{
   position:absolute;
+  width:40px;
+  height:40px;
   color:white;
   background:#444;
-  padding:12px 12px 9px 12px;
   border-radius:50%;
   font-size:20px; 
   text-align:center;
+  line-height:2.1em;
   -webkit-transition:
       all 0.2s ease-in-out;
+}
+.exit_edit{
+  z-index:103;
+  top:20px;
+  right:20px;
+  background:rgba(57,120,172,0.4) !important;
+  opacity:0;
+}
+.exit_edit:hover{
+  cursor:pointer;
+  background:rgba(57,120,172,0.9) !important;
 }
 #l_icon{
   top:20px;
   left:20px;
 }
+
 .add_icon{
   z-index:103;
-  top:21px;
+  top:20px;
   right:20px;
   opacity:0;
 }
+.edit_icon{
+  z-index:103;
+  top:20px;
+  right:80px;
+  opacity:0;
+}
 
-.add_icon_show{
+.icon_show{
   -webkit-transition: opacity 1.5s ease-in-out;
   opacity:1;
 }
-#l_icon:hover, .add_icon:hover{
+
+#l_icon:hover, .add_icon:hover, .edit_icon:hover{
   cursor:pointer;
   background-color:white;
   color:#222;
@@ -554,8 +575,9 @@ float:right;
 /*dream list*/
 
 #dreamList{
+  position:relative;
   width:100%;
-  height:100%;
+  height:83.5%;
   overflow:hidden;
   margin:0;
   overflow:auto;
@@ -582,8 +604,14 @@ float:right;
   background:rgba(57,120,172,0.4);
   cursor:pointer;
 }
+.dream_editMode:hover{
+  background:rgba(232,44,12,0.2) !important;
+}
 .dreamActive{
   background:rgba(57,120,172,0.8);
+}
+.dreamActive_editMode{
+  background:rgba(232,44,12,0.4) !important;
 }
 .showProfileImg{
  -webkit-transform:translateX(100px); 
@@ -607,13 +635,31 @@ float:right;
   left:-100px;
   -webkit-transition: -webkit-transform 0.4s linear;
 }
+
 .profileImg{
   display:inline;
   margin-top:15px;
   box-shadow:
     0 0 0 4px rgba(225,225,225,0.5);
-
 }
+.delete_icon{
+  position:absolute;
+  top:10px;
+  background:rgba(225,225,225,0.9);
+  background:rgba(0,0,0,0.2);
+  box-shadow:0 0 5px rgba(255,255,255,0.5);
+  color:#aaa;
+  text-align:center;
+  font-size:50px;
+  padding:5px 0px 5px 0px;
+  border-radius:50%;
+  margin-left:-30px;
+  -webkit-transition:all 0.2s linear;
+}
+.delete_icon:hover{
+  color:rgba(232,44,12,0.6);
+}
+
 .dreamDate, .dreamInfo{
   float:left;
 
@@ -684,7 +730,7 @@ float:right;
 
 /*popup*/
 .popup {
-	display: inline-block;
+  display:none;
 	position:absolute;
   top:54px;
 	width: 170px;
@@ -768,6 +814,7 @@ float:right;
 }
 
 .popup_open{
+  display:inline-block;
   opacity:1;
 }
 
