@@ -1,5 +1,4 @@
 DreamLog::Application.routes.draw do
-
   root :to => 'pages#login'
   match 'test' => 'pages#test'
 
@@ -18,7 +17,7 @@ DreamLog::Application.routes.draw do
   match 'logs'=>'log#all'
   match 'log/create'=>'log#create'
   match 'log/update'=>'log#update'
-  match 'logs/:id'=>'log#delete'
+  match 'log/delete'=>'log#delete'
   #comments
   match 'comments'=>'comment#all'
   match 'comment/create'=>'comment#create'

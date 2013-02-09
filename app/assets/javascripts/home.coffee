@@ -51,8 +51,10 @@ class Log extends Backbone.Model
     $.post 'log/update', data, (r)->
       self.set r
       self.trigger 'logUpdated'
-
-
+  delete:->
+    self=@
+    $.post 'log/delete',{id:self.get 'id'}, ()->
+      self.destroy()
 #     Logs Collection 
 
 class Logs extends Backbone.Collection
@@ -599,7 +601,7 @@ class LogView extends Backbone.View
       year:time.getFullYear()
     }
   deleteLog:=>
-    @model.destroy()
+    @model.delete()
 
   destroy:=>
     @remove()
