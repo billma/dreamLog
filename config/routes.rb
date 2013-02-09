@@ -17,7 +17,8 @@ DreamLog::Application.routes.draw do
   #logs 
   match 'logs'=>'log#all'
   match 'log/create'=>'log#create'
-
+  match 'log/update'=>'log#update'
+  match 'logs/:id'=>'log#delete'
   #comments
   match 'comments'=>'comment#all'
   match 'comment/create'=>'comment#create'

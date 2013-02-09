@@ -37,6 +37,7 @@ class Users extends Backbone.Collection
 #     Log Model
 
 class Log extends Backbone.Model
+  url:'logs'
   initialize:(option)->
   create:(data)->
     self=@
@@ -45,7 +46,13 @@ class Log extends Backbone.Model
       #create a new Logview
       new LogView({model:self})
       self.trigger 'newLogCreated'
-       
+  update:(data)->
+    self=@
+    $.post 'log/update', data, (r)->
+      self.set r
+      self.trigger 'logUpdated'
+
+
 #     Logs Collection 
 
 class Logs extends Backbone.Collection
@@ -130,7 +137,7 @@ usersCollection.fetch()
 class HomePage extends Backbone.View
   el:$('body')
   events:
-    'click .add_icon':'showNewDream'
+    'click .add_icon':'openForm'
     'click .edit_icon':'activateEditMode'
     'click .exit_edit':'exitEditMode'
   initialize:->
@@ -156,28 +163,35 @@ class HomePage extends Backbone.View
       
     newDreamLog=new NewDreamLog()
     
-  showNewDream:=>
+  openForm:=>
     dreamLog.close()
+    newDreamLog.clearForm()
     newDreamLog.open()
 
+
   activateEditMode:=>
+
+    editMode=true
     dreamLog.clearActive()
+    newDreamLog.clearForm()
+    newDreamLog.activateEditMode()
     filter.userFilter()
     filter.hide()
-    editMode=true
     dreamLog.close()
-    $('.profileImg, .delete_icon').toggle()
     $('.exit_edit, .edit_icon, .add_icon').toggle()
+    $('.profileImg, .delete_icon').toggle()
     $('.dream').addClass 'dream_editMode'
     $('.profileImg-wrap').addClass 'showProfileImg'
     $('.dreamDate').addClass 'dreamDateFades'
 
   exitEditMode:=>
+    editMode=false
     newDreamLog.close()
     newDreamLog.clearActive()
+    newDreamLog.clearForm()
+    newDreamLog.exitEditMode()
     filter.noFilter()
     filter.show()
-    editMode=false
     $('.profileImg, .delete_icon').toggle()
     $('.exit_edit, .edit_icon, .add_icon').toggle()
     $('.dream').removeClass 'dream_editMode'
@@ -404,10 +418,18 @@ class NewDreamLog extends Backbone.View
 
   submit:->
     @ballEffect()
-    @addNewLog()
+    if editMode
+      @updateLog()
+    else
+      @addNewLog()
 
   open:->
     $('#newDreamLog-wrap').removeClass 'dreamLog_closed'
+
+  load:(log)->
+    @model=log
+    $('#title').val log.get('title')
+    $('#body').val log.get('body')
 
   close:->
     @bounceEffect()
@@ -420,21 +442,60 @@ class NewDreamLog extends Backbone.View
     ,500)
   isOpen:->
     return !$('#newDreamLog-wrap').hasClass 'dreamLog_closed'
+
+  activateEditMode:->
+    @bounceEffect()
+    $('#title, #body').css 'background', 'rgba(232, 44, 12, 0.1)'
+    $('#submit').css 'background', 'rgba(255,72,13,0.1)'
+
+  exitEditMode:->
+    @bounceEffect()
+    $('#title, #body').css 'background', 'rgba(57, 120, 172, 0.3)'
+    $('#submit').css 'background', 'rgba(57, 120, 172, 0.3)'
+    
   clearActive:->
     $('.dream').removeClass 'dreamActive_editMode'
-
-
+  clearForm:->
+    $('#title').val ''
+    $('#body').val ''
 
   #---------------
   # private mehtod
   #
   ballEffect:=>
-    $('#submit-effect').removeClass 'bounceOut'
-    $('#submit-effect').addClass 'ball'
+    @clearEffect()
+    if editMode
+      $('#submit-effect').addClass 'ball_editMode'
+    else
+      $('#submit-effect').addClass 'ball'
 
   bounceEffect:=>
-    $('#submit-effect').addClass 'bounceOut'
+    @clearEffect()
+    if editMode
+      $('#submit-effect').addClass 'bounceOut_editMode'
+    else
+      $('#submit-effect').addClass 'bounceOut'
+  clearEffect:=>
+    $('#submit-effect').removeClass 'bounceOut_editMode'
+    $('#submit-effect').removeClass 'bounceOut'
     $('#submit-effect').removeClass 'ball'
+    $('#submit-effect').removeClass 'ball_editMode'
+
+
+  updateLog:=>
+    self=@
+    data={
+      log_id:@model.get 'id'
+      title:$('#title').val()
+      body:$('#body').val()
+    }
+    @model.update data
+    @.listenTo @model, 'logUpdated', ->
+      setTimeout( ->
+        self.bounceEffect()
+        self.close()
+      ,1000)
+
 
   addNewLog:=>
     self=@
@@ -448,8 +509,11 @@ class NewDreamLog extends Backbone.View
       setTimeout( ->
         self.bounceEffect()
         self.close()
+        lv= new LogView {model:newLog}
+        $('#dreamList').prepend lv.render()
         dreamLog.load(newLog)
         dreamLog.open()
+
       ,1000)
       
 # ----------------------------------        
@@ -476,22 +540,31 @@ class LogView extends Backbone.View
     @model.set {
       user_icon:user_icon
     }
-    @render()
+
+    @.listenTo @model, 'logUpdated', @render
+    @.listenTo @model, 'destroy', @destroy
 
   render:->
     $(@el).attr 'user_id',@model.get('user_id')
     $(@el).attr 'title', @model.get('title').toLowerCase().replace(/\s+/g, '')
     $(@el).html(@template(@model.toJSON()))
-    $('#dreamList').prepend @el
-    
+    if editMode
+      @.$('.profileImg, .delete_icon').toggle()
+      @.$('.dream').addClass 'dream_editMode'
+      @.$('.profileImg-wrap').addClass 'showProfileImg'
+      @.$('.dreamDate').addClass 'dreamDateFades'
+
+    return @el
+
   dreamHandler:->
 
     # edit mode
     if editMode
       dreamLog.close()
       newDreamLog.clearActive()
+      newDreamLog.load(@model)
       $(@el).addClass 'dreamActive_editMode'
-
+      
       if newDreamLog.isOpen()
         newDreamLog.flash()
       else
@@ -526,8 +599,10 @@ class LogView extends Backbone.View
       year:time.getFullYear()
     }
   deleteLog:=>
-    alert 'TO-DO list'
-    #@model.delete()
+    @model.destroy()
+
+  destroy:=>
+    @remove()
       
 # --------------------------------        
 #
@@ -548,7 +623,8 @@ class LogListView extends Backbone.View
 
   render:->
     dreams.each (data)->
-      new LogView({model:data})
+      lv=new LogView({model:data})
+      $('#dreamList').prepend lv.render()
 
 
 # -------------------------------        
@@ -674,6 +750,6 @@ usersCollection.on 'reset', ->
     comments.fetch()
     replies.fetch()
     new HomePage()
-    init()
+    #init()
      
   
