@@ -33,33 +33,28 @@ class Users extends Backbone.Collection
     return @.get(id).get 'thumb_url'
   getName:(id)->
     return @.get(id).get 'name'
-
+  hasVoted:(log_id)->
+    if votes.where {log_id:log_id, user_id:@.get('id')}
+      return true
+    else
+      return false
 #     Log Model
 
 class Log extends Backbone.Model
-  url:'logs'
+  paramRoot: 'log'
+  url:->
+    if @id
+      return "log/#{@id}"
+    else
+      return "log"
+
   initialize:(option)->
-  create:(data)->
-    self=@
-    $.post 'log/create', data, (r)->
-      self.set r
-      #create a new Logview
-      new LogView({model:self})
-      self.trigger 'newLogCreated'
-  update:(data)->
-    self=@
-    $.post 'log/update', data, (r)->
-      self.set r
-      self.trigger 'logUpdated'
-  delete:->
-    self=@
-    $.post 'log/delete',{id:self.get 'id'}, ()->
-      self.destroy()
+
 #     Logs Collection 
 
 class Logs extends Backbone.Collection
   model:Log
-  url:'logs'
+  url:'log'
 
 
 #------Comment model ---------------
@@ -103,6 +98,41 @@ class Replies extends Backbone.Collection
   getCommentReplies:(id)->
     return @.where {comment_id:id}
 
+#------Vote Model ---------------
+
+class Vote extends Backbone.Model
+  paramRoot: 'vote'
+  url:->
+    if @id
+      return "vote/#{@id}"
+    else
+      return "vote"
+
+  initialize:(option)->
+    self=@
+    @.bind 'remove', ->
+      self.destroy()
+
+
+class Votes extends Backbone.Collection
+  model:Vote
+  url:'vote'
+
+  initialize:->
+  getVotes:(log_id)->
+    userVote=false
+    r=@.where {log_id:log_id}
+    d=@.where {
+      log_id:log_id
+      user_id:currentUser.get('id')
+    }
+    if d.length>0
+      userVote=true
+    return {
+      count:r.length
+      userVote: userVote
+    }
+
 
 #=================
 #
@@ -120,10 +150,8 @@ usersCollection= new Users()
 dreams= new Logs()
 comments=new Comments()
 replies=new Replies()
+votes=new Votes()
 usersCollection.fetch()
-
-
-
 
 
 # =================
@@ -153,7 +181,6 @@ class HomePage extends Backbone.View
     # when replies are loaded
     # create DreamLog
     replies.on 'reset', ->
-      console.log replies
       dreamLog=new DreamLog()
       
     #create leftBar
@@ -164,6 +191,7 @@ class HomePage extends Backbone.View
     filter=new Filter()
       
     newDreamLog=new NewDreamLog()
+   
     
   openForm:=>
     dreamLog.close()
@@ -282,9 +310,6 @@ class Filter extends Backbone.View
 
     
 
-
-
-
 # -----------------------------------
 #
 #           DreamLog 
@@ -303,9 +328,10 @@ class DreamLog extends Backbone.View
     'click #read':'showRead'
     'click #comments':'showComments'
     'keyup #addComment':'addComment'
+    'click #vote':'vote'
 
   initialize:->
-    self=@
+        self=@
   
   # --------------- 
   # private methods 
@@ -333,7 +359,35 @@ class DreamLog extends Backbone.View
         comments.push c
         new CommentView {model:c}
       $('#addComment').val('')
+  vote:=>
+    data={
+      log_id:@log.get('id') ,
+      user_id:currentUser.get 'id'
+    }
+    vote=votes.where data
+    self=@
+    if vote.length>0
+      votes.remove vote[0]
+      @updateVotes()
+    else
+      votes.create data
+      @updateVotes()
 
+  heartEmpty:=>
+      $('#vote i').removeClass 'icon-heart'
+      $('#vote i').addClass 'icon-heart-empty'
+  heartFull:=>
+      $('#vote i').removeClass 'icon-heart-empty'
+      $('#vote i').addClass 'icon-heart'
+
+  updateVotes:=>
+    n= votes.getVotes @log.get 'id'
+    $('#voteCount').html n['count']
+    @log.set {vote_counts:n['count']}
+    if n['userVote']
+      @heartFull()
+    else
+      @heartEmpty()
 
    # ---------------
    # public methods
@@ -343,17 +397,20 @@ class DreamLog extends Backbone.View
     self=@
     @log=log
     #load reading content
-    log.set {cuser_icon:currentUser.get 'thumb_url'}
+    data=log.toJSON()
+    data.cuser_icon=currentUser.get 'thumb_url'
 
     # sync time with dreamLog flash
     setTimeout( ->
-      $(self.el).html self.template(log.toJSON())
+      $(self.el).html self.template(data)
+      self.updateVotes()
       #load comments 
       logComments= comments.getLogComments(log.get('id'))
       _.each logComments, (comment)->
          new CommentView {model:comment}
     ,500)
-    
+
+   
   #open dream log
   open:->
     if @isOpen()
@@ -435,6 +492,7 @@ class NewDreamLog extends Backbone.View
 
   close:->
     @bounceEffect()
+    @clearActive()
     $('#newDreamLog-wrap').addClass 'dreamLog_closed'
   flash:->
     self=@
@@ -491,8 +549,7 @@ class NewDreamLog extends Backbone.View
       title:$('#title').val()
       body:$('#body').val()
     }
-    @model.update data
-    @.listenTo @model, 'logUpdated', ->
+    @model.save data, success:->
       setTimeout( ->
         self.bounceEffect()
         self.close()
@@ -505,9 +562,7 @@ class NewDreamLog extends Backbone.View
       title:$('#title').val()
       body:$('#body').val()
     }
-    newLog=new Log()
-    newLog.create data
-    @.listenTo newLog, 'newLogCreated', ->
+    dreams.create data, success:(newLog)->
       setTimeout( ->
         self.bounceEffect()
         self.close()
@@ -517,7 +572,7 @@ class NewDreamLog extends Backbone.View
         dreamLog.open()
 
       ,1000)
-      
+
 # ----------------------------------        
 #
 #             LogView: 
@@ -537,19 +592,31 @@ class LogView extends Backbone.View
     'click .delete_icon':'deleteLog'
 
   initialize:->
+    # find user icon by user id
     user_icon=usersCollection.get(@model.get('user_id')).get 'thumb_url'
+
+    # create calender with timestamp
     @setupCalendar()
+
+    # set user_icon
     @model.set {
       user_icon:user_icon
+      vote_counts:votes.getVotes(@model.id)['count']
     }
-
-    @.listenTo @model, 'logUpdated', @render
+    
+    # listen for change and destroy event
+    @.listenTo @model, 'change', @render
     @.listenTo @model, 'destroy', @destroy
 
   render:->
+    # set attr for filtering and log searching
     $(@el).attr 'user_id',@model.get('user_id')
     $(@el).attr 'title', @model.get('title').toLowerCase().replace(/\s+/g, '')
+    # load template with data 
     $(@el).html(@template(@model.toJSON()))
+    if $(@el).hasClass 'dreamActive'
+      @dreamActive()
+    # dipslay in edit mode
     if editMode
       @.$('.profileImg, .delete_icon').toggle()
       @.$('.dream').addClass 'dream_editMode'
@@ -559,14 +626,12 @@ class LogView extends Backbone.View
     return @el
 
   dreamHandler:->
-
     # edit mode
     if editMode
       dreamLog.close()
       newDreamLog.clearActive()
       newDreamLog.load(@model)
       $(@el).addClass 'dreamActive_editMode'
-      
       if newDreamLog.isOpen()
         newDreamLog.flash()
       else
@@ -583,7 +648,10 @@ class LogView extends Backbone.View
         dreamLog.open()
 
   dreamActive:=>
+    # clear previously active dreamLog
     dreamLog.clearActive()
+
+    # activate current dreamLog
     @.$('.profileImg-wrap').addClass 'showProfileImg'
     @.$('.dreamDate').addClass 'dreamDateFades'
     @.$('.dreamArrow').addClass 'showDreamArrow'
@@ -595,13 +663,15 @@ class LogView extends Backbone.View
       'Jul','Aug','Sep','Oct','Nov','Dec'
     ]
     time= new Date @model.get 'created_at'
+    
     @model.set {
       date:time.getDate()
       month:month[time.getMonth()]
       year:time.getFullYear()
     }
+
   deleteLog:=>
-    @model.delete()
+    @model.destroy()
 
   destroy:=>
     @remove()
@@ -621,7 +691,8 @@ class LogListView extends Backbone.View
     self=@
     # render after all dreams are loaded
     dreams.on 'reset', ->
-      self.render()
+       votes.on 'reset', ->
+          self.render()
 
   render:->
     dreams.each (data)->
@@ -751,6 +822,7 @@ usersCollection.on 'reset', ->
     dreams.fetch()
     comments.fetch()
     replies.fetch()
+    votes.fetch()
     new HomePage()
     init()
      

@@ -32,7 +32,6 @@
 
 
 <script id="comment-template" type="text/x-handlebars-template">
-  
   <div class="comment-content">
     <div class="user-icon-wrap">
       <img src="{{user_icon}}" alt="" class="user_icon img-circle" />
@@ -86,7 +85,6 @@
 
 
 
-
 <script id="dreamLog-template" type="text/x-handlebars-template">
   <div id="dreamLog-header">
   </div>
@@ -107,6 +105,10 @@
     <span class="switch-selection"></span>
   </div>
   <div class="dream_content showRead">
+    <div id="vote">
+      <i class="icon-heart"></i> 
+      <span id="voteCount">12</span>
+    </div>
     <div class="dreamLog-title">{{title}}</div>    
     <p class="dreamLog-body">{{body}}</p>
   </div>
@@ -145,7 +147,7 @@
     <div class="dreamTitle">{{title}}</div>
     <div class="dreamVote">
       <i class="icon-heart"></i>
-      12
+      {{vote_counts}} 
     </div>
   </div>
   <div class="dreamArrow">

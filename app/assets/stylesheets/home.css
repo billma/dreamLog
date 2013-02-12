@@ -217,6 +217,7 @@ canvas{
 .dreamLog_closed{
   -webkit-transform:scale(0);
 }
+
 .dream_content{
   position:relative;
   color:white;
@@ -226,6 +227,27 @@ canvas{
   margin:auto;
   overflow:auto;
   color:#BBB;
+}
+
+#vote{
+  width:100%;
+  height:40px;
+  font-size:30px;
+  text-align:center;
+  position:relative;
+  margin-bottom:20px;
+  margin-top:30px;
+}
+#vote i{
+  border-radius:50%;
+  background:rgba(57,120,172,0.3);
+  padding:12px 10px 8px 10px;
+  color: rgba(56, 223, 255, 0.8);
+}
+#vote i:hover{
+  background:rgba(57,120,172,0.2);
+  color: rgba(56, 223, 255, 0.9);
+  cursor:pointer;
 }
 .dream_content{
   -webkit-transform:scale(0);

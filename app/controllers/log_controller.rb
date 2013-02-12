@@ -1,8 +1,5 @@
 class LogController < ApplicationController
 
-  def all
-    render :json=> Log.all
-  end 
   def index
     render :json=> Log.all
   end 
@@ -20,8 +17,7 @@ class LogController < ApplicationController
     log.update_attributes(:body => params[:body], :title => params[:title])
     render :json=> log 
   end 
-  def delete 
-    printa "lll"
+  def destroy 
     Log.find(params[:id]).destroy()
     render :text=> 'success'
   end 
