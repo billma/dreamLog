@@ -4,7 +4,6 @@ html{
 }
 
 body {
-	background-color: #326696;
 	margin: 0px;
 	overflow: hidden;
 	font-family:Monospace;
@@ -16,12 +15,11 @@ body {
   height:100%; 
   -webkit-transition:all 4s ; 
   opacity:0;
+  background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
+ -webkit-background-size: cover;
  }
 .b-img{
-  opacity:1;
-background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-
+ opacity:1;
  }
 a {
 	color:#0078ff;

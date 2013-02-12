@@ -31,3 +31,6 @@ input:focus, textarea:focus{
   border-radius:10px;
   
 }
+a:hover{
+  text-decoration:none;
+}

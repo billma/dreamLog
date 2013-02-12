@@ -15,10 +15,8 @@ class VoteController < ApplicationController
  end
 
  def destroy
-   printa "destroying"
    Vote.find(params[:id]).destroy()
    render :text=>"success"
-   
  end 
 
 end

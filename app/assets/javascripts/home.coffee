@@ -104,8 +104,10 @@ class Vote extends Backbone.Model
   paramRoot: 'vote'
   url:->
     if @id
+      # DELETE 
       return "vote/#{@id}"
     else
+      # POST
       return "vote"
 
   initialize:(option)->
@@ -142,7 +144,7 @@ class Votes extends Backbone.Collection
 
 
 # setup global variables
-dreamLog=popup=filter=leftbar=newDreamLog=logList=''
+dreamLog=popup=filter=leftBar=newDreamLog=logList=''
 editMode=false
 #setup collections and data
 currentUser=new CurrentUser()
@@ -243,7 +245,7 @@ class LeftBar extends Backbone.View
 
   initialize:->
 
-  toggleSidebar:=>
+  toggleSidebar:->
      if $('.left').hasClass 'left_close'
        $('.left').removeClass 'left_close'
        $('.right').removeClass 'right_expand'
@@ -785,9 +787,6 @@ class CommentView extends Backbone.View
       @.$('.addReply').val('')
 
 
-
-
-
 # ------------------------------        
 #
 #          ReplyView: 
@@ -824,6 +823,9 @@ usersCollection.on 'reset', ->
     replies.fetch()
     votes.fetch()
     new HomePage()
-    init()
-     
+    $('body').addClass('b-img')
+    setTimeout  ->
+      init()
+    ,1500
+    leftBar.toggleSidebar()
   
