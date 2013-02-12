@@ -29,7 +29,7 @@ background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
   width:100px;
   height:100px;
   margin: auto;
-  margin-top:300px;
+  margin-top:320px;
   border-radius:50%; 
   background: -webkit-radial-gradient( rgba(57,120,172,1), rgba(40,84,120,0.6) ); 
   box-shadow: inset 0 0 35px rgba(0,0,0,0.4), 0 2px 4px rgba(0,0,0,0.8);
@@ -84,7 +84,7 @@ background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
   font-size:20px;
   bottom:-80px;
   left:-50px;
-  opacity:0;
+  opacity:0.8;
   -webkit-transition:all 0.4s linear;
   text-shadow: 0 0 5px rgba(255,255,255,0.4);
   line-height:1.5em;
@@ -93,7 +93,7 @@ background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
   opacity:1;
 }
 #loginButton:hover #cloudLine{
--webkit-filter: blur(15px); 
+  -webkit-filter: blur(15px); 
  
 }
 #cloudLine{
