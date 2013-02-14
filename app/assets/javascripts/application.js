@@ -12,8 +12,4 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require underscore
-//= require backbone
-//= require timeago
-//= require handlebar
 //= require app

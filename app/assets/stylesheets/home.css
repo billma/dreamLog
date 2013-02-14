@@ -17,6 +17,7 @@ body {
   opacity:0;
   background:url('/img/Moons_wallpapers_378.jpg') no-repeat center center fixed;
  -webkit-background-size: cover;
+ font-family: 'Original Surfer', cursive;
  }
 .b-img{
  opacity:1;
@@ -55,7 +56,7 @@ canvas{
   height:100%;
   position:relative;}
 
-#l_icon, .add_icon, .edit_icon, .exit_edit{
+#l_icon,.edit_icon, .exit_edit{
   position:absolute;
   width:40px;
   height:40px;
@@ -88,12 +89,31 @@ canvas{
   z-index:103;
   top:20px;
   right:20px;
+  display:none;
+  height:80px;
+  color:rgba(56, 223, 255, 0.5);
   opacity:0;
+  -webkit-transition:
+      all 0.2s ease-in-out;
+
+}
+.add_icon p{
+  font-size:20px;
+  line-height:4em;
+  font-weight:normal;
+  
+}
+.add_icon:hover{
+  background-color:rgba(56, 223, 255, 0.3);
+  cursor:pointer;
+  color:rgba(56, 223, 255, 0.8);
+    -webkit-transition:
+      all 0.2s ease-in-out;
 }
 .edit_icon{
   z-index:103;
   top:20px;
-  right:80px;
+  right:20px;
   opacity:0;
 }
 
@@ -102,7 +122,7 @@ canvas{
   opacity:1;
 }
 
-#l_icon:hover, .add_icon:hover, .edit_icon:hover{
+#l_icon:hover, .edit_icon:hover{
   cursor:pointer;
   background-color:white;
   color:#222;
@@ -178,6 +198,10 @@ canvas{
   border-top-right-radius:10px;
 }
 
+.dreamLog-content{
+  width:100%;
+  height:100%;
+}
 #dreamLog-header{
   position:absolute;
   top:0;

@@ -24,11 +24,7 @@ function init() {
 	var context = canvas.getContext( '2d' );
 
 	var gradient = context.createLinearGradient( 0, 0, 0, canvas.height );
-	gradient.addColorStop(0, "#001621");
-  gradient.addColorStop(0.5, "#080733")
-  gradient.addColorStop(1, "#0A2366");
 
-	context.fillStyle = gradient;
 	context.fillRect(0, 0, canvas.width, canvas.height);
 
 	container.style.background = 'url(' + canvas.toDataURL('image/png') + ')';

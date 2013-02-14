@@ -1,5 +1,5 @@
 class CommentController < ApplicationController
-  def all
+  def index 
     render :json => Comment.all
   end 
   def create

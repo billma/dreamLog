@@ -1,7 +1,9 @@
 class ReplyController < ApplicationController
-  def all
+
+  def index 
     render :json => Reply.all
   end 
+
   def create
     r= Reply.create({
       body:params[:body],
@@ -11,4 +13,5 @@ class ReplyController < ApplicationController
     })
     render :json=> r
   end 
+
 end
