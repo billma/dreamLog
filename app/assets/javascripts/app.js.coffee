@@ -32,3 +32,4 @@ window.App={
   replies:null
   votes:null
 }
+console.log window.App
