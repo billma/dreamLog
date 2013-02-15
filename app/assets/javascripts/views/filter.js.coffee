@@ -47,7 +47,7 @@ class App.Filter extends Backbone.View
       if @mode is "noFilter"
         @noFilter()
       
-      if @mode is "userFilter" or editMode
+      if @mode is "userFilter" or App.editMode
         @userFilter()
       
     else

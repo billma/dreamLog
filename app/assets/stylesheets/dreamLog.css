@@ -1,0 +1,230 @@
+/* dreamLog.css */
+
+#dreamLog{
+  position:relative;
+  width:80%;
+  height:70%;
+  margin: auto;
+  background-color:rgba(0,0,0,0.6);
+  margin-top:30px;
+  box-shadow: 
+		0 0 0 15px rgba(255,255,255,0.2), 
+    0 0 5px rgba(0,0,0,0.2),
+    inset 0 0 50px rgba(0,0,0,0.1);
+  -webkit-transition: 
+    -webkit-transform 0.5s ease-in-out,
+    opacity 0.1s ease-in-out;
+  border-radius:10px;
+  padding-top:40px;
+} 
+
+#dreamLog:before{
+  content:'';
+  position:relative;
+  top:-20px;
+  display:block;
+  width:95%;
+  height:30px;
+  margin:0 auto;
+  box-shadow:
+    0 2px -1px rgba(255,255,255,0.1);
+  border-top-left-radius:10px;
+  border-top-right-radius:10px;
+}
+
+.dreamLog-content{
+  width:100%;
+  height:100%;
+}
+#dreamLog-header{
+  position:absolute;
+  top:0;
+  left:100px;
+  width:85%;
+  height:50px;
+  line-height:2em;
+
+}
+.dreamLog_closeButton{
+  position:absolute;
+  top:10px;
+  right:30px;
+  font-size:20px;
+  color:#aaa;
+  padding:8px 10px 5px 10px;
+  border-radius:50%;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  z-index:101;
+
+}
+.dreamLog_closeButton:hover{
+  cursor:pointer;
+  color:#ccc;
+  box-shadow:
+    0 0 5px rgba(0,0,0,0.2),
+    inset 0 0 50px rgba(0,0,0,0.4);
+}
+.dreamLog_closeButton:active{
+  box-shadow:
+    0 0 5px rgba(255,255,255,0.2),
+    inset 0 0 50px rgba(255,255,255,0.4);
+  color:black;
+}
+
+.dreamLog_closed{
+  -webkit-transform:scale(0);
+}
+
+.dream_content{
+  position:relative;
+  color:white;
+  width:80%;
+  max-width:800px;
+  height:82%;
+  margin:auto;
+  overflow:auto;
+  color:#BBB;
+
+}
+
+.dreamLog-title{
+  font-size:30px;
+  line-height:2em;
+  text-transform:capitalize;
+  margin-top:20px;
+  margin-bottom:50px;
+
+  
+}
+.dreamLog-body{
+  font-size:17px;
+  line-height:2em;
+}
+
+
+#vote{
+  width:100%;
+  height:40px;
+  font-size:30px;
+  text-align:center;
+  position:relative;
+  margin-bottom:20px;
+  margin-top:30px;
+}
+#vote i{
+  border-radius:50%;
+  background:rgba(57,120,172,0.3);
+  padding:12px 10px 8px 10px;
+  color: rgba(56, 223, 255, 0.8);
+}
+#vote i:hover{
+  background:rgba(57,120,172,0.2);
+  color: rgba(56, 223, 255, 0.9);
+  cursor:pointer;
+}
+.dream_content{
+  -webkit-transform:scale(0);
+  opacity:0;
+}
+.comment-wrap{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  -webkit-transform:scale(0);
+  opacity:0;
+  
+  overflow:hidden;
+}
+
+/*dream log tabs*/
+.showRead{
+  -webkit-transition:all 0.4s linear;
+  opacity:1;
+  -webkit-transform:scale(1);
+}
+.showComments{
+  -webkit-transition:all 0.4s linear;
+  opacity:1;
+  -webkit-transform:scale(1);
+}
+
+#dreamLog-tabs{
+  position:relative;
+  height:50px; 
+  width:85%;
+  max-width:800px;
+  margin:auto;
+  top:-10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.switch-label {
+  display:block;
+  position: relative;
+  z-index: 2;
+  float: left;
+  width:49.5%;
+  line-height: 26px;
+  font-size:20px;
+  color:rgba(255,255,255,0.5);
+  line-height:2.5em;
+  text-align: center;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.45);
+  cursor: pointer;
+}
+
+.switch-label:active {
+  font-weight: bold;
+}
+
+.switch-label-off {
+  padding-left: 2px;
+}
+
+.switch-label-on {
+  padding-right: 2px;
+}
+
+.switch-input {
+  display: none;
+}
+
+.switch-input:checked + .switch-label {
+  font-weight: bold;
+  color: rgba(56, 223, 255, 0.8);
+  text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+}
+
+.switch-input:checked + .switch-label-on ~ .switch-selection {
+  /* Note: left: 50% doesn't transition in WebKit */
+  left: 50%;
+}
+
+.switch-selection {
+  display: block;
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  width: 50%;
+  height: 100%;
+  border-radius: 3px;
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+  background:rgba(57,120,172,0.3);
+}
+
+
+
+
