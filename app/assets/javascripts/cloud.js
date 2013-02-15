@@ -9,7 +9,7 @@ var fps=15
 var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 
-//init();
+init();
 function init() {
 	container = document.createElement( 'div' );
   container.id="intro"
@@ -84,16 +84,9 @@ function init() {
 	renderer.setSize( window.innerWidth, window.innerHeight );
 	container.appendChild( renderer.domElement );
 
-	//document.addEventListener( 'mousemove', onDocumentMouseMove, false );
 	window.addEventListener( 'resize', onWindowResize, false );
 }// end of init()
 
-
-function onDocumentMouseMove( event ) {
- 		mouseX = ( event.clientX - windowHalfX ) * 0.25;
-		mouseY = ( event.clientY - windowHalfY ) * 0.15;
-
-}
 
 function onWindowResize( event ) {
  		camera.aspect = window.innerWidth / window.innerHeight;

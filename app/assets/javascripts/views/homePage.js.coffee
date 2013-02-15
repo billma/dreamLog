@@ -12,7 +12,7 @@ class App.HomePage extends Backbone.View
 
   initialize:->
     self=@
-    init()
+    #init()
     App.currentUser = new App.CurrentUser()
     App.usersCollection= new App.Users()
     App.dreams= new App.Logs()
