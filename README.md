@@ -27,7 +27,7 @@ There are seven backbone class:
     
     
     
-####assets/javascript/models
+####assets/javascript/models:
 
 models.js.coffee contains all backbone models and collections
 
