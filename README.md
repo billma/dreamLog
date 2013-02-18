@@ -78,4 +78,17 @@ __model.js.coffee:__
         model:Log
         url:'log'
 
+__Log_Controller.rb:__
+
+    def index
+    end 
+    
+    def create
+    end 
+    
+    def update
+    end 
+    
+    def destroy
+    end
 
