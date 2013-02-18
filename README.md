@@ -2,14 +2,17 @@ dreamLog
 ========
 
 DreamLog is a simple message board for dreams. It is built with backbone.js together with handlebar.js for creating template. 
-All backbone views and models are located in <code>assests/javascripts</code> directory
+All backbone views and models are located in <code>assests/javascripts</code> directory.
 
-Checkout a live [demo here](http://dreamlog.heroku.com)
+Checkout a live [demo here](http://dreamlog.heroku.com).
 
 ####assets/javascript/views
-There are seven backbone class: 
-    
-    class HomePage       // homePage.js.coffee
+
+There are seven backbone class:
+
+#####homePage.js.coffee
+
+    class HomePage       
     
     class DreamLog       // dreamLog.js.coffee
     
@@ -24,3 +27,6 @@ There are seven backbone class:
     class ReplyView      // replyView.js.coffee
     
     
+####assets/javascript/models
+
+models.js.coffee
