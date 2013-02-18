@@ -10,11 +10,13 @@ Checkout a live [demo here](http://dreamlog.heroku.com).
 
 There are seven backbone class:
 
-#####homePage.js.coffee
+homePage.js.coffee : 
 
-    class HomePage       
+    class HomePage  
     
-    class DreamLog       // dreamLog.js.coffee
+dreamLog.js.coffee :
+    
+    class DreamLog       
     
     class LeftBar        // leftBar.js.coffee
     
