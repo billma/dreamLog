@@ -31,11 +31,11 @@ There are seven backbone class:
 
 models.js.coffee contains all backbone models and collections
 
-__collections__:
- * users
- * logs
- * comments
- * replies
- * votes
+__collections__:            __models__:
+ * users                    * user
+ * logs                     * log
+ * comments                 * comment
+ * replies                  * reply
+ * votes                    * vote
  
 
