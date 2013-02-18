@@ -9,18 +9,18 @@ Checkout a live [demo here](http://dreamlog.heroku.com)
 ####Views
 There are five backbone class: 
     
-    class HomePage # homePage.js.coffee
+    class HomePage  // homePage.js.coffee
     
-    class DreamLog 
+    class DreamLog  // dreamLog.js.coffee
     
-    class LeftBar
+    class LeftBar // leftBar.js.coffee
     
-    class NewDreamLog
+    class NewDreamLog  // newDreamLog.js.coffee
     
-    class Filter
+    class Filter  // filter.js.coffee
     
-    class CommentView
+    class CommentView  // commentView.js.coffee
     
-    class ReplyView
+    class ReplyView  // replyView.js.coffee
     
     
