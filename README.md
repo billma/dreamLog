@@ -6,13 +6,13 @@ All backbone views and models are located in <code>assests/javascripts</code> di
 
 Checkout a live [demo here](http://dreamlog.heroku.com).
 
-####assets/javascript/views
+####assets/javascript/views:
 
-There are seven backbone class:
+  There are seven backbone class:
 
- * homePage.js.coffee : 
+   * homePage.js.coffee : 
     
- * dreamLog.js.coffee :    
+   * dreamLog.js.coffee :    
     
  * leftBar.js.coffee :   
 
