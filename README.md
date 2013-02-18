@@ -14,15 +14,15 @@ There are seven backbone class:
     
  * dreamLog.js.coffee :    
     
-/leftBar.js.coffee :   
+ * leftBar.js.coffee :   
 
-/newDreamLog.js.coffee:
+ * newDreamLog.js.coffee:
 
-/filter.js.coffee: 
+ * filter.js.coffee: 
        
-/commentView.js.coffee:
+ * commentView.js.coffee:
 
-/replyView.js.coffee:
+ * replyView.js.coffee:
 
     
     
