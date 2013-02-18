@@ -18,15 +18,25 @@ dreamLog.js.coffee :
     
     class DreamLog       
     
-    class LeftBar        // leftBar.js.coffee
-    
-    class NewDreamLog    // newDreamLog.js.coffee
-    
-    class Filter         // filter.js.coffee
-    
-    class CommentView    // commentView.js.coffee
-    
-    class ReplyView      // replyView.js.coffee
+leftBar.js.coffee :
+
+    class LeftBar        
+
+newDreamLog.js.coffee:
+
+    class NewDreamLog    
+
+filter.js.coffee: 
+
+    class Filter         
+
+commentView.js.coffee:
+
+    class CommentView    
+
+replyView.js.coffee:
+
+    class ReplyView      
     
     
 ####assets/javascript/models
