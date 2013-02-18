@@ -12,31 +12,30 @@ There are seven backbone class:
 
 homePage.js.coffee : 
 
-    class HomePage  
+
     
 dreamLog.js.coffee :
     
-    class DreamLog       
+    
     
 leftBar.js.coffee :
 
-    class LeftBar        
+    
 
 newDreamLog.js.coffee:
 
-    class NewDreamLog    
+
 
 filter.js.coffee: 
-
-    class Filter         
+       
 
 commentView.js.coffee:
 
-    class CommentView    
+  
 
 replyView.js.coffee:
 
-    class ReplyView      
+    
     
     
 ####assets/javascript/models
