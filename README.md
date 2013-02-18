@@ -52,6 +52,30 @@ __collections__:
             # setup page and load page content
 
 
+####Setting up backbone collection with rails backend
 
+Here is an example on Logs collection:
+
+__routes.rb:__
+
+    resources :log
+    
+__model.js.coffee:__
+    
+    # Log model 
+    class Log extends Backbone.Model
+        paramRoot: 'log'              # set up root parameter
+        url:->
+            if @id
+                return "log/#{@id}"   # --> GET, DELETE, PUT
+            else
+                return "log"          # --> POST/CREATE
+
+        initialize:(option)->
+        
+    # Logs collection
+    class Logs extends Backbone.Collection
+        model:Log
+        url:'log'
 
 
